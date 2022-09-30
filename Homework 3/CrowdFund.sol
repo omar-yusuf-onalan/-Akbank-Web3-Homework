@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.17;
 
 import "./IERC20.sol";
 
@@ -28,13 +28,11 @@ contract CrowdFund {
         uint32 endAt;
         bool claimed;
     }
-    // we use IERC20 token
-    // we use 1 token for security reasons
+    
     IERC20 public immutable token;
-    // everytime we create a new campaign
-    // this count will increment
+    
     uint256 public count;
-    // uint = id of the campaign
+    
     mapping(uint256 => Campaign) public campaigns;
     mapping(uint256 => mapping(address => uint256)) public pledgedAmount;
 
@@ -47,9 +45,6 @@ contract CrowdFund {
         uint32 _startAt,
         uint32 _endAt
     ) external {
-        // startAt should be greater than or equal to current block timestamp
-        //  endAt should be greater than or equal to startAt
-        // it must be less than or equal to 90 days from the current block that timestamp
         require(_startAt >= block.timestamp, "start at < now");
         require(_endAt >= _startAt, "end at < start at");
         require(_endAt <= block.timestamp + 90 days, "end at > max duration");
